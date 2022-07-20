@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+<title>Move to Click Position</title>
+<style type="text/css">
+body {
+    background-color: rgba(30, 255, 0, 0.808);
+    margin: 10px;
+    margin-top: 10px;
+}
+#contentContainer {
+    width: 1290px;
+    height: 637px;
+    border: 5px black solid;
+    overflow: hidden;
+    background-color: #F2F2F2;
+    cursor: pointer;
+}
+#thing {
+    position: relative;
+    left: 10px;
+    top: 10px;
+    transition: left .5s ease-in, top .5s ease-in;
+}
+
+/*.........................*/
+
+.square {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+  color: white;
+  font-size: 22px;
+}
+
+.rotate {
+  animation: rotate 1s infinite linear;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+</style>
+</head>
+ 
+<body>
+  
+<div id="contentContainer"><center><h1>Hecho por Alexa y Fer</h1></center>  
+    <img id="thing" class="square rotate" src="http://assets.stickpng.com/images/580b585b2edbce24c47b2b84.png" width="150" height="150">
+</div>
+ 
+
+<script>
+var theThing = document.querySelector("#thing");
+var container = document.querySelector("#contentContainer");
+ 
+container.addEventListener("click", getClickPosition, false);
+ 
+function getClickPosition(e) {
+    var parentPosition = getPosition(e.currentTarget);
+    var xPosition = e.clientX - parentPosition.x - (theThing.clientWidth / 2);
+    var yPosition = e.clientY - parentPosition.y - (theThing.clientHeight / 2);
+     
+    theThing.style.left = xPosition + "px";
+    theThing.style.top = yPosition + "px";
+}
+ 
+// Función auxiliar para obtener la posición exacta de un elemento
+  function getPosition(el) {
+  var xPos = 0;
+  var yPos = 0;
+ 
+  while (el) {
+    if (el.tagName == "BODY") {
+// lidiar con las peculiaridades del navegador con cuerpo/ventana/documento y desplazamiento de página
+      var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+      var yScroll = el.scrollTop || document.documentElement.scrollTop;
+ 
+      xPos += (el.offsetLeft - xScroll + el.clientLeft);
+      yPos += (el.offsetTop - yScroll + el.clientTop);
+    } else {
+// para todos los demás elementos que no son BODY
+      xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+      yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+    }
+ 
+    el = el.offsetParent;
+  }
+  return {
+    x: xPos,
+    y: yPos
+  };
+}
+</script>
+
+</body></html>
